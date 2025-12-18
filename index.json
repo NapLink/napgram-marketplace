@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "name": "NapLink Marketplace",
+  "plugins": [
+    {
+      "id": "ping-pong",
+      "name": "Ping Pong Plugin (Template)",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "entry": { "type": "file", "path": "dist/index.mjs" },
+          "dist": {
+            "type": "tgz",
+            "url": "https://github.com/NapLink/napgram-plugin-template/releases/download/v0.1.0/ping-pong-0.1.0.tgz",
+            "sha256": "40e4993bf82b64712a5cd367b752caebd7b6773fbb22d5f862a38ff27aac2408"
+          },
+          "permissions": { "network": [], "fs": [], "instances": [0] }
+        }
+      ]
+    }
+  ]
+}
