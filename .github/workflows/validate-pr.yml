@@ -26,8 +26,22 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           path: pr
           persist-credentials: false
+      - id: expected-id
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ref = context.payload.pull_request.head.ref || '';
+            const title = context.payload.pull_request.title || '';
+            const refMatch = ref.match(/^marketplace\/([a-zA-Z0-9_-]+)/);
+            const titleMatch = title.match(/marketplace:\s*update\s+([a-zA-Z0-9_-]+)/i);
+            const match = refMatch || titleMatch;
+            if (match) {
+              core.setOutput('id', match[1]);
+            }
       - id: validate
         continue-on-error: true
+        env:
+          EXPECTED_PLUGIN_ID: ${{ steps.expected-id.outputs.id }}
         run: node scripts/validate-marketplace-pr.mjs --base index.json --pr pr/index.json --out validation.json
       - name: Comment and close on failure
         if: steps.validate.outcome == 'failure'

@@ -10,6 +10,7 @@ const getArg = (name) => {
 const basePath = getArg('--base');
 const prPath = getArg('--pr');
 const outPath = getArg('--out');
+const expectedIdArg = getArg('--expected-id');
 
 if (!basePath || !prPath) {
   console.error('Usage: node scripts/validate-marketplace-pr.mjs --base <path> --pr <path> [--out <path>]');
@@ -60,6 +61,7 @@ const errors = [];
 
 const baseIndex = await readJson(basePath);
 const prIndex = await readJson(prPath);
+const expectedPluginId = expectedIdArg || process.env.EXPECTED_PLUGIN_ID || '';
 
 function validateIndexShape(index, label) {
   if (index.schemaVersion !== 1) {
@@ -78,6 +80,10 @@ function validateIndexShape(index, label) {
 const basePlugins = validateIndexShape(baseIndex, 'base index.json');
 const prPlugins = validateIndexShape(prIndex, 'pr index.json');
 
+if (baseIndex.name !== prIndex.name) {
+  errors.push('pr index.json: top-level name cannot be changed');
+}
+
 const basePluginMap = new Map();
 for (const plugin of basePlugins) {
   if (plugin && isNonEmptyString(plugin.id)) {
@@ -87,6 +93,7 @@ for (const plugin of basePlugins) {
 
 const prPluginMap = new Map();
 const prPluginIds = new Set();
+const changedPluginIds = new Set();
 
 for (const plugin of prPlugins) {
   if (!plugin || typeof plugin !== 'object') {
@@ -113,10 +120,12 @@ for (const [id, basePlugin] of basePluginMap.entries()) {
   const prPlugin = prPluginMap.get(id);
   if (!prPlugin) {
     errors.push(`pr index.json: plugin "${id}" removed`);
+    changedPluginIds.add(id);
     continue;
   }
   if (basePlugin.name !== prPlugin.name) {
     errors.push(`pr index.json: plugin "${id}" name changed`);
+    changedPluginIds.add(id);
   }
 }
 
@@ -135,6 +144,9 @@ for (const plugin of prPlugins) {
   }
 
   if (!Array.isArray(plugin.versions)) continue;
+  if (!basePlugin) {
+    changedPluginIds.add(plugin.id);
+  }
 
   const seenVersions = new Set();
   for (const version of plugin.versions) {
@@ -194,10 +206,12 @@ for (const plugin of prPlugins) {
       const prCanonical = stableStringify(version);
       if (baseCanonical !== prCanonical) {
         errors.push(`pr index.json: version "${versionLabel}" modifies existing version`);
+        changedPluginIds.add(plugin.id);
       }
       continue;
     }
 
+    changedPluginIds.add(plugin.id);
     if (version.dist?.url && version.dist?.sha256) {
       downloads.push({
         label: versionLabel,
@@ -205,6 +219,20 @@ for (const plugin of prPlugins) {
         sha256: String(version.dist.sha256).toLowerCase(),
       });
     }
+  }
+}
+
+if (changedPluginIds.size === 0) {
+  errors.push('pr index.json: no plugin changes detected');
+} else if (changedPluginIds.size > 1) {
+  errors.push(`pr index.json: multiple plugin ids modified (${[...changedPluginIds].join(', ')})`);
+}
+
+if (expectedPluginId) {
+  if (!isValidId(expectedPluginId)) {
+    errors.push('pr index.json: expected plugin id is invalid');
+  } else if (!changedPluginIds.has(expectedPluginId)) {
+    errors.push(`pr index.json: changes must target plugin id "${expectedPluginId}"`);
   }
 }
 
