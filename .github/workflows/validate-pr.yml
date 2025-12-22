@@ -49,6 +49,8 @@ jobs:
       - name: Auto-merge on success
         if: steps.validate.outcome == 'success'
         uses: actions/github-script@v7
+        env:
+          MARKETPLACE_PR_TOKEN: ${{ secrets.MARKETPLACE_PR_TOKEN }}
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -71,10 +73,25 @@ jobs:
               return;
             }
             const headRepo = context.payload.pull_request.head.repo.full_name;
+            const headRef = context.payload.pull_request.head.ref;
             const baseRepo = `${owner}/${repo}`;
             if (headRepo === baseRepo) {
-              const ref = `heads/${context.payload.pull_request.head.ref}`;
+              const ref = `heads/${headRef}`;
               await github.rest.git.deleteRef({ owner, repo, ref });
+              return;
+            }
+            const token = process.env.MARKETPLACE_PR_TOKEN;
+            if (!token) {
+              core.notice('MARKETPLACE_PR_TOKEN not set; skipping fork branch deletion.');
+              return;
+            }
+            try {
+              const [headOwner, headRepoName] = headRepo.split('/');
+              const client = github.getOctokit(token);
+              const ref = `heads/${headRef}`;
+              await client.rest.git.deleteRef({ owner: headOwner, repo: headRepoName, ref });
+            } catch (error) {
+              core.notice(`Failed to delete fork branch: ${error.message}`);
             }
       - if: steps.validate.outcome == 'failure'
         run: exit 1
