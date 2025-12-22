@@ -31,7 +31,7 @@
       "id": "slave-market",
       "name": "大牛马时代",
       "description": "大牛马时代 - NapGram 群聊经济养成游戏插件",
-      "readme": "https://raw.githubusercontent.com/magisk317/napgram-plugin-slave-market/v1.0.1/README.md",
+      "readme": "https://raw.githubusercontent.com/magisk317/napgram-plugin-slave-market/v1.0.2/README.md",
       "versions": [
         {
           "version": "1.0.1",
@@ -43,6 +43,25 @@
             "type": "tgz",
             "url": "https://github.com/magisk317/napgram-plugin-slave-market/releases/download/v1.0.1/slave-market-1.0.1.tgz",
             "sha256": "571728705d5c0abea1d3a73cdb83214ce0d0b14a04c1aeddfbb15baf96f7dae9"
+          },
+          "permissions": {
+            "instances": [
+              0
+            ],
+            "network": [],
+            "fs": []
+          }
+        },
+        {
+          "version": "1.0.2",
+          "entry": {
+            "type": "file",
+            "path": "dist/index.mjs"
+          },
+          "dist": {
+            "type": "tgz",
+            "url": "https://github.com/magisk317/napgram-plugin-slave-market/releases/download/v1.0.2/slave-market-1.0.2.tgz",
+            "sha256": "69ebdeafb12ecbd5446ec72ddb3185b8d9be7ad0fb3fd079b3481774ea8cdb21"
           },
           "permissions": {
             "instances": [
