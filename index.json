@@ -91,6 +91,46 @@
           }
         }
       ]
+    },
+    {
+      "id": "link-analysis",
+      "name": "Link Analysis (XHS/Bilibili)",
+      "description": "Parse Xiaohongshu and Bilibili share links and render a quick preview.",
+      "readme": "https://raw.githubusercontent.com/magisk317/napgram-plugin-link-analysis/v0.0.1/README.md",
+      "versions": [
+        {
+          "version": "0.0.1",
+          "entry": {
+            "type": "file",
+            "path": "dist/index.mjs"
+          },
+          "dist": {
+            "type": "tgz",
+            "url": "https://github.com/magisk317/napgram-plugin-link-analysis/releases/download/v0.0.1/link-analysis-0.0.1.tgz",
+            "sha256": "5be8ff89922b775096d32d02d1b4448809e5edbc519c0fa20a0ca59a69e3f70c"
+          },
+          "permissions": {
+            "network": [
+              "xiaohongshu.com",
+              "www.xiaohongshu.com",
+              "xhslink.com",
+              "bilibili.com",
+              "www.bilibili.com",
+              "m.bilibili.com",
+              "b23.tv",
+              "bili22.cn",
+              "bili23.cn",
+              "bili33.cn",
+              "bili2233.cn",
+              "api.bilibili.com"
+            ],
+            "fs": [],
+            "instances": [
+              0
+            ]
+          }
+        }
+      ]
     }
   ]
 }
