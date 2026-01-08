@@ -185,22 +185,37 @@ for (const plugin of prPlugins) {
       }
     }
 
-    const permissions = version.permissions || {};
-    if (!Array.isArray(permissions.instances)) {
-      errors.push(`pr index.json: version "${versionLabel}" permissions.instances must be an array`);
-    } else if (permissions.instances.some((value) => !Number.isInteger(value) || value < 0)) {
-      errors.push(`pr index.json: version "${versionLabel}" permissions.instances must be non-negative integers`);
+
+    // permissions 是可选的，只在存在时验证格式
+    if (version.permissions !== undefined) {
+      const permissions = version.permissions;
+      if (typeof permissions !== 'object' || permissions === null) {
+        errors.push(`pr index.json: version "${versionLabel}" permissions must be an object`);
+      } else {
+        if (permissions.instances !== undefined) {
+          if (!Array.isArray(permissions.instances)) {
+            errors.push(`pr index.json: version "${versionLabel}" permissions.instances must be an array`);
+          } else if (permissions.instances.some((value) => !Number.isInteger(value) || value < 0)) {
+            errors.push(`pr index.json: version "${versionLabel}" permissions.instances must be non-negative integers`);
+          }
+        }
+        if (permissions.network !== undefined) {
+          if (!Array.isArray(permissions.network)) {
+            errors.push(`pr index.json: version "${versionLabel}" permissions.network must be an array`);
+          } else if (permissions.network.some((value) => !isNonEmptyString(value))) {
+            errors.push(`pr index.json: version "${versionLabel}" permissions.network must be strings`);
+          }
+        }
+        if (permissions.fs !== undefined) {
+          if (!Array.isArray(permissions.fs)) {
+            errors.push(`pr index.json: version "${versionLabel}" permissions.fs must be an array`);
+          } else if (permissions.fs.some((value) => !isNonEmptyString(value))) {
+            errors.push(`pr index.json: version "${versionLabel}" permissions.fs must be strings`);
+          }
+        }
+      }
     }
-    if (!Array.isArray(permissions.network)) {
-      errors.push(`pr index.json: version "${versionLabel}" permissions.network must be an array`);
-    } else if (permissions.network.some((value) => !isNonEmptyString(value))) {
-      errors.push(`pr index.json: version "${versionLabel}" permissions.network must be strings`);
-    }
-    if (!Array.isArray(permissions.fs)) {
-      errors.push(`pr index.json: version "${versionLabel}" permissions.fs must be an array`);
-    } else if (permissions.fs.some((value) => !isNonEmptyString(value))) {
-      errors.push(`pr index.json: version "${versionLabel}" permissions.fs must be strings`);
-    }
+
 
     const baseVersion = baseVersions.get(version.version);
     if (baseVersion) {
