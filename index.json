@@ -96,7 +96,7 @@
       "id": "link-analysis",
       "name": "Link Analysis (XHS/Bilibili)",
       "description": "Parse Xiaohongshu and Bilibili share links and render a quick preview.",
-      "readme": "https://raw.githubusercontent.com/magisk317/napgram-plugin-link-analysis/v0.0.2/README.md",
+      "readme": "https://raw.githubusercontent.com/magisk317/napgram-plugin-link-analysis/v0.0.3/README.md",
       "versions": [
         {
           "version": "0.0.1",
@@ -140,6 +140,18 @@
             "type": "tgz",
             "url": "https://github.com/magisk317/napgram-plugin-link-analysis/releases/download/v0.0.2/link-analysis-0.0.2.tgz",
             "sha256": "8c9e9241dd49c9c39d039d62ac02ffe81757c1ef955909b7342e74509802f54b"
+          }
+        },
+        {
+          "version": "0.0.3",
+          "entry": {
+            "type": "file",
+            "path": "dist/index.mjs"
+          },
+          "dist": {
+            "type": "tgz",
+            "url": "https://github.com/magisk317/napgram-plugin-link-analysis/releases/download/v0.0.3/link-analysis-0.0.3.tgz",
+            "sha256": "f37fc7ac646f7839e3067ef37765008d8984ffe39073b60d6a768c09e800634e"
           }
         }
       ]
