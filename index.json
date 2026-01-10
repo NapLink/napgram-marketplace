@@ -163,7 +163,7 @@
           "dist": {
             "type": "tgz",
             "url": "https://github.com/magisk317/napgram-plugin-link-analysis/releases/download/v0.0.4/link-analysis-0.0.4.tgz",
-            "sha256": "9848f87c4ccbd9e8931a60f51dbb314d515d86f4af02fe45b3cf43d057668736"
+            "sha256": "d9cd750897e76312fb8c54b2fc53bfcd72f4a434b66a6770c69a93a83f04f28f"
           }
         }
       ]
