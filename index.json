@@ -191,6 +191,26 @@
           }
         }
       ]
+    },
+    {
+      "id": "group-analysis",
+      "name": "群组分析",
+      "description": "群聊数据分析插件，支持多维度统计、智能话题总结、用户称号分析和金句提取",
+      "readme": "https://raw.githubusercontent.com/magisk317/napgram-plugin-group-analysis/v0.0.2/README.md",
+      "versions": [
+        {
+          "version": "0.0.2",
+          "entry": {
+            "type": "file",
+            "path": "dist/index.mjs"
+          },
+          "dist": {
+            "type": "tgz",
+            "url": "https://github.com/magisk317/napgram-plugin-group-analysis/releases/download/v0.0.2/group-analysis-0.0.2.tgz",
+            "sha256": "a1d7bd8750c2afa61789ed7e99185682aa1c0f73d16f55bd493fb11f909b2708"
+          }
+        }
+      ]
     }
   ]
 }
